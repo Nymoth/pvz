@@ -1,0 +1,13 @@
+.grid {
+  display: flex;
+}
+
+.tile {
+  background-color: #070;
+  transition: background-color 0.2s;
+}
+
+.tile.even {
+  background-color: #090;
+}
+
