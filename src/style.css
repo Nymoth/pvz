@@ -1,3 +1,9 @@
+
+body {
+  font-family: monospace;
+
+  --shoveling: rgb(151, 86, 26)
+}
 .actions {
   display: flex;
 }
@@ -7,23 +13,50 @@
   flex-direction: column;
   align-items: center;
   margin-right: 5px;
+  justify-content: center;
 }
 .energy > img {
   margin-bottom: 5px;
 }
 .energy > div {
   font-size: 20px;
-  font-family: monospace;
 }
 
+.plant-container {
+  display: flex;
+}
+.plant-container.inactive {
+  opacity: 0.5;
+  pointer-events: none;
+}
 .plant-card {
   border: 1px solid #000;
   border-radius: 5px;
   padding: 3px;
   margin: 3px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.plant-card > img {
+  margin-bottom: 5px;
 }
 .grounded-plant {
   margin: 10px;
+}
+
+.shovel {
+  border-radius: 5px;
+  padding: 5px;
+  margin: 10px;
+  transition: background-color 0.2s, box-shadow 0.2s;
+}
+.shovel:hover {
+  background-color: var(--shoveling);
+}
+.shovel.active {
+  background-color: var(--shoveling);
+  box-shadow: yellow 0 0 5px 5px
 }
 
 .grid {
@@ -43,4 +76,7 @@
 }
 .tile.dropping-error {
   box-shadow: inset red 0 0 5px 5px;
+}
+.tile.shoveling {
+  background-color: var(--shoveling);
 }
