@@ -69,11 +69,14 @@ const grid: Tile[][] = [];
 
 const appRoot = document.getElementById('app')!;
 
+const fallingSuns: HTMLImageElement[] = [];
+
 let movingPlant: Plant | null = null;
 let energy = 50;
 let energyText: HTMLDivElement;
 let plantsContainer: HTMLDivElement;
 let shovel: HTMLImageElement;
+let gridDom: HTMLDivElement;
 let shoveling = false;
 
 function getPlantImage(plant: Plant, size: number): HTMLImageElement {
@@ -147,12 +150,7 @@ function tileDrop(tile: Tile, evt: DragEvent) {
   evt.preventDefault();
   (evt.target! as HTMLDivElement).classList.remove('dropping', 'dropping-error');
   if (tile.state !== TileState.Empty || !movingPlant || movingPlant.energyCost > energy) return;
-  const img = getPlantImage(movingPlant, 80);
-  img.classList.add('grounded-plant');
-  tile.dom.appendChild(img);
-  tile.state = TileState.Planted;
-  tile.plant = movingPlant;
-  setEnergy(energy - movingPlant.energyCost);
+  placePlant(movingPlant, tile);
   movingPlant = null;
 }
 
@@ -193,7 +191,7 @@ function initActions() {
 }
 
 function initGrid() {
-  const gridDom = document.createElement('div');
+  gridDom = document.createElement('div');
   gridDom.style.display = 'flex';
   gridDom.classList.add('grid');
   let even = true;
@@ -225,5 +223,69 @@ function initGrid() {
   appRoot.appendChild(gridDom);
 }
 
+function placePlant(plant: Plant, tile: Tile) {
+  const img = getPlantImage(plant, 80);
+  img.classList.add('grounded-plant');
+  tile.dom.appendChild(img);
+  tile.state = TileState.Planted;
+  tile.plant = plant;
+  setEnergy(energy - plant.energyCost);
+
+  switch (plant.type) {
+    case PlantType.Peashooter: {
+
+      break;
+    }
+    case PlantType.Sunflower: {
+
+      break;
+    }
+    case PlantType.CherryBomb: {
+
+      break;
+    }
+    case PlantType.WallNut: {
+
+      break;
+    }
+    case PlantType.PotatoMine: {
+
+      break;
+    }
+    case PlantType.SnowPea: {
+
+      break;
+    }
+  }
+}
+
+function spawnSunFallinFromSky() {
+  const img = new Image(80, 80);
+  img.src = '/sun.png';
+  const x = Math.max(0, Math.floor(Math.random() * WIDTH * SIZE) - 80);
+  img.style.position = 'absolute';
+  img.style.left = `${x}px`;
+  img.style.top = '0px';
+  img.addEventListener('click', () => {
+    setEnergy(energy + 50);
+    gridDom.removeChild(img);
+  });
+  fallingSuns.push(img);
+  gridDom.appendChild(img);
+}
+
+function frame() {
+  fallingSuns.forEach(sun => {
+    const top = +sun.style.top.replace('px', '');
+    if (top < HEIGHT * SIZE - 80) {
+      sun.style.top = `${top + 1}px`;
+    }
+  });
+  setTimeout(() => requestAnimationFrame(() => frame()), 1000 / 60);
+}
+
 initActions();
 initGrid();
+
+setInterval(() => spawnSunFallinFromSky(), 10000);
+frame();
