@@ -1,13 +1,46 @@
+.actions {
+  display: flex;
+}
+
+.energy {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-right: 5px;
+}
+.energy > img {
+  margin-bottom: 5px;
+}
+.energy > div {
+  font-size: 20px;
+  font-family: monospace;
+}
+
+.plant-card {
+  border: 1px solid #000;
+  border-radius: 5px;
+  padding: 3px;
+  margin: 3px;
+}
+.grounded-plant {
+  margin: 10px;
+}
+
 .grid {
   display: flex;
 }
 
 .tile {
   background-color: #070;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, box-shadow 0.2s;
+  position: relative;
 }
-
 .tile.even {
   background-color: #090;
 }
-
+.tile.dropping {
+  box-shadow: inset yellow 0 0 5px 5px;
+}
+.tile.dropping-error {
+  box-shadow: inset red 0 0 5px 5px;
+}
