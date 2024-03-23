@@ -26,6 +26,7 @@ type Tile = {
   x: number;
   y: number;
   plant?: Plant;
+  removeTimer?: Function;
 };
 
 const plants: Plant[] = [
@@ -130,7 +131,8 @@ function tileMouseLeave(tile: Tile) {
 
 function shovelTile(tile: Tile) {
   if (!shoveling) return;
-  if (tile.state !== TileState.Empty) {
+  if (tile.state !== TileState.Empty && tile.plant) {
+    if (tile.removeTimer) tile.removeTimer();
     tile.plant = undefined;
     tile.state = TileState.Empty;
     tile.dom.removeChild(tile.dom.querySelector('img')!);
@@ -237,7 +239,19 @@ function placePlant(plant: Plant, tile: Tile) {
       break;
     }
     case PlantType.Sunflower: {
-
+      const timer = setInterval(() => {
+        const img = new Image(60, 60);
+        img.src = '/sun.png';
+        img.style.position = 'absolute';
+        img.style.left = `${tile.x * SIZE + Math.max(0, Math.floor(Math.random() * SIZE) - 60)}px`;
+        img.style.top = `${tile.y * SIZE + Math.max(0, Math.floor(Math.random() * SIZE) - 60)}px`;
+        img.addEventListener('click', () => {
+          setEnergy(energy + 25);
+          gridDom.removeChild(img);
+        });
+        gridDom.appendChild(img);
+      }, 24000);
+      tile.removeTimer = () => clearInterval(timer);
       break;
     }
     case PlantType.CherryBomb: {
